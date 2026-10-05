@@ -1,5 +1,9 @@
 import axios from "axios";
-import type { ApiResponse, FetchMoviesParams } from "../types/movies";
+import type {
+  ApiResponse,
+  FetchMoviesParams,
+  MovieDetails,
+} from "../types/movies";
 
 const BASE_URL = "https://www.omdbapi.com/";
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
@@ -19,6 +23,20 @@ export const fetchMovies = async ({
       s: searchTerm,
       page: page,
       type: type || undefined,
+    },
+  });
+
+  return response.data;
+};
+
+export const fetchMovieDetails = async (
+  imdbID: string,
+): Promise<MovieDetails> => {
+  const response = await axios.get<MovieDetails>(BASE_URL, {
+    params: {
+      apikey: API_KEY,
+      i: imdbID,
+      plot: "full",
     },
   });
 
