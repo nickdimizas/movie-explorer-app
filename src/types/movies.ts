@@ -1,3 +1,5 @@
+export type MovieType = "movie" | "series" | "episode" | "";
+
 export interface Movie {
   imdbID: string;
   Title: string;
@@ -12,8 +14,16 @@ export interface MovieDetails extends Movie {
   Runtime?: string;
   Genre?: string;
   Director?: string;
+  Writer?: string;
+  Actors?: string;
   Plot?: string;
+  Language?: string;
+  Country?: string;
+  Awards?: string;
+  Ratings?: { Source: string; Value: string }[];
+  Metascore?: string;
   imdbRating?: string;
+  imdbVotes?: string;
 }
 
 export interface ApiResponse {
@@ -26,5 +36,11 @@ export interface ApiResponse {
 export interface FetchMoviesParams {
   searchTerm: string;
   page?: number;
-  type?: string;
+  type?: MovieType;
+}
+
+export interface SearchBarProps {
+  onSearch: (searchTerm: string, type: MovieType) => void;
+  initialSearchTerm?: string;
+  initialType?: MovieType;
 }
