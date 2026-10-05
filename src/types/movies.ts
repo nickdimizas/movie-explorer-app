@@ -22,3 +22,9 @@ export interface ApiResponse {
   Response: "True" | "False";
   Error?: string;
 }
+
+export interface FetchMoviesParams {
+  searchTerm: string;
+  page?: number;
+  type?: string;
+}
