@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import type { MovieType, SearchBarProps } from "../types/movies";
+import { useDebounce } from "../../hooks/useDebounce";
+import type { MovieType, SearchBarProps } from "../../types/movies";
 
 export const SearchBar = ({
   onSearch,
