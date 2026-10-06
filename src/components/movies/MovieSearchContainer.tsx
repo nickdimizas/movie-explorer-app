@@ -1,81 +1,58 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { SearchBar } from "../ui/SearchBar";
-import { useMovies } from "../../hooks/useMovies";
+import { MovieGrid } from "./MovieGrid";
+import { MovieDetailsModal } from "./MovieDetailsModal";
+import { useMovies, useMovieDetails } from "../../hooks/useMovies";
 import type { MovieType } from "../../types/movies";
 
 export const MovieSearchContainer = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("Batman");
-  const [selectedType, setSelectedType] = useState<MovieType>("");
-  const [page, setPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [type, setType] = useState<MovieType>("");
+  const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
-  const { data, isLoading, isError, error } = useMovies({
+  const { data, isLoading, isError } = useMovies({
     searchTerm,
-    type: selectedType,
-    page,
+    type,
+    page: 1,
   });
 
-  const handleSearch = useCallback(
-    (newSearchTerm: string, newType: MovieType) => {
-      setSearchTerm(newSearchTerm);
-      setSelectedType(newType);
-      setPage(1);
-    },
-    [],
+  const { data: movieDetails, isLoading: isDetailsLoading } = useMovieDetails(
+    selectedMovieId || "",
   );
 
-  return (
-    <div className="space-y-8">
-      {/* Search Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-          Search Movies & TV Shows
-        </h2>
-        <p className="text-slate-400 text-sm sm:text-base">
-          Find your favorite movies, series, and episodes with real-time API
-          data.
-        </p>
-      </div>
+  const handleSearch = (term: string, selectedType: MovieType) => {
+    setSearchTerm(term);
+    setType(selectedType);
+  };
 
-      {/* Search Bar Component */}
-      <SearchBar
-        onSearch={handleSearch}
-        initialSearchTerm={searchTerm}
-        initialType={selectedType}
+  const handleSelectMovie = (imdbID: string) => {
+    setSelectedMovieId(imdbID);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMovieId(null);
+  };
+
+  return (
+    <main className="container mx-auto px-4 py-8 max-w-7xl min-h-screen">
+      {/* SearchBar Component */}
+      <SearchBar onSearch={handleSearch} />
+
+      {/* MovieGrid Component */}
+      <MovieGrid
+        movies={data?.Search || []}
+        isLoading={isLoading}
+        isError={isError}
+        onSelectMovie={handleSelectMovie}
       />
 
-      {/* Results / Status Section */}
-      {isLoading && (
-        <div className="flex justify-center items-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500" />
-        </div>
-      )}
-
-      {isError && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-center max-w-xl mx-auto">
-          {error instanceof Error
-            ? error.message
-            : "An error occurred while fetching movies."}
-        </div>
-      )}
-
-      {!isLoading && !isError && data?.Search && (
-        <div className="space-y-4">
-          <p className="text-slate-400 text-sm">
-            Found{" "}
-            <span className="text-indigo-400 font-semibold">
-              {data.totalResults}
-            </span>{" "}
-            results for "{searchTerm}"
-          </p>
-          {/* Εδώ θα μπει το MovieGrid / MovieCard */}
-        </div>
-      )}
-
-      {!isLoading && !isError && !data?.Search && (
-        <div className="text-center text-slate-400 py-16">
-          No results found. Try searching for something else!
-        </div>
-      )}
-    </div>
+      {/* MovieDetailsModal Component */}
+      <MovieDetailsModal
+        movie={movieDetails}
+        isLoading={isDetailsLoading}
+        isOpen={!!selectedMovieId}
+        onClose={handleCloseModal}
+      />
+    </main>
   );
 };
