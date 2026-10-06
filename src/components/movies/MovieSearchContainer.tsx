@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { SearchBar } from "./SearchBar";
+import { SearchBar } from "../ui/SearchBar";
 import { useMovies } from "../../hooks/useMovies";
 import type { MovieType } from "../../types/movies";
 

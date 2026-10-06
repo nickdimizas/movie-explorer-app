@@ -1,8 +1,11 @@
+import { MainLayout } from "./components/layout/MainLayout";
+import { MovieSearchContainer } from "./components/movies/MovieSearchContainer";
+
 const App = () => {
   return (
-    <>
-      <h1>Movie Explorer</h1>
-    </>
+    <MainLayout>
+      <MovieSearchContainer />
+    </MainLayout>
   );
 };
 
