@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import type { MovieType, SearchBarProps } from "../../types/movies";
@@ -13,11 +13,16 @@ export const SearchBar = ({
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  const onSearchRef = useRef(onSearch);
+  useEffect(() => {
+    onSearchRef.current = onSearch;
+  }, [onSearch]);
+
   useEffect(() => {
     if (debouncedSearchTerm.trim()) {
-      onSearch(debouncedSearchTerm.trim(), selectedType);
+      onSearchRef.current(debouncedSearchTerm.trim(), selectedType);
     }
-  }, [debouncedSearchTerm, selectedType, onSearch]);
+  }, [debouncedSearchTerm, selectedType]);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
