@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
-import type { MovieType, SearchBarProps } from "../../types/movies";
+import type { MovieType, SortOption, SearchBarProps } from "../../types/movies";
 
 export const SearchBar = ({
   onSearch,
@@ -10,6 +10,7 @@ export const SearchBar = ({
 }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm);
   const [selectedType, setSelectedType] = useState<MovieType>(initialType);
+  const [sortOption, setSortOption] = useState<SortOption>("");
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -20,14 +21,14 @@ export const SearchBar = ({
 
   useEffect(() => {
     if (debouncedSearchTerm.trim()) {
-      onSearchRef.current(debouncedSearchTerm.trim(), selectedType);
+      onSearchRef.current(debouncedSearchTerm.trim(), selectedType, sortOption);
     }
-  }, [debouncedSearchTerm, selectedType]);
+  }, [debouncedSearchTerm, selectedType, sortOption]);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      onSearch(searchTerm.trim(), selectedType);
+      onSearch(searchTerm.trim(), selectedType, sortOption);
     }
   };
 
@@ -39,12 +40,16 @@ export const SearchBar = ({
     setSelectedType(e.target.value as MovieType);
   };
 
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value as SortOption);
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
       role="search"
       aria-label="Movie search form"
-      className="flex flex-col sm:flex-row gap-3 w-full max-w-3xl mx-auto mb-8"
+      className="flex flex-col sm:flex-row gap-3 w-full max-w-4xl mx-auto mb-8"
     >
       {/* Search Input Container */}
       <div className="relative flex-1">
@@ -91,6 +96,24 @@ export const SearchBar = ({
           <option value="movie">Movies</option>
           <option value="series">Series</option>
           <option value="episode">Episodes</option>
+        </select>
+      </div>
+
+      {/* Select Sort Dropdown */}
+      <div className="w-full sm:w-auto">
+        <label htmlFor="movie-sort-select" className="sr-only">
+          Sort movies by year
+        </label>
+        <select
+          id="movie-sort-select"
+          value={sortOption}
+          onChange={handleSortChange}
+          aria-label="Sort search results by year"
+          className="w-full sm:w-auto px-4 py-3 rounded-lg bg-slate-800 text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer text-base"
+        >
+          <option value="">Default Order</option>
+          <option value="year-desc">Year: Newest First</option>
+          <option value="year-asc">Year: Oldest First</option>
         </select>
       </div>
 

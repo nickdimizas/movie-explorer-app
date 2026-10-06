@@ -1,5 +1,7 @@
 export type MovieType = "movie" | "series" | "episode" | "";
 
+export type SortOption = "" | "year-desc" | "year-asc";
+
 export interface Movie {
   imdbID: string;
   Title: string;
@@ -40,7 +42,11 @@ export interface FetchMoviesParams {
 }
 
 export interface SearchBarProps {
-  onSearch: (searchTerm: string, type: MovieType) => void;
+  onSearch: (
+    searchTerm: string,
+    type: MovieType,
+    sortOption: SortOption,
+  ) => void;
   initialSearchTerm?: string;
   initialType?: MovieType;
 }
