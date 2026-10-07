@@ -93,4 +93,4 @@ src/
 
 ## 👤 Author
 
-**Nikos Dimizas** – [GitHub](https://github.com/nickdimizas) · [LinkedIn](www.linkedin.com/in/nikos-dimizas-144ba6385)
+**Nikos Dimizas** – [GitHub](https://github.com/nickdimizas) · [LinkedIn](https://www.linkedin.com/in/nikos-dimizas-144ba6385/)
