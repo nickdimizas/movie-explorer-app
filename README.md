@@ -93,4 +93,4 @@ src/
 
 ## 👤 Author
 
-**Your Name** – [GitHub](https://github.com/your-username) · [LinkedIn](https://www.linkedin.com/in/your-profile)
+**Your Name** – [GitHub](https://github.com/nickdimizas) · [LinkedIn](www.linkedin.com/in/nikos-dimizas-144ba6385)
