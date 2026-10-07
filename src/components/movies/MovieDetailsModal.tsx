@@ -20,6 +20,8 @@ export const MovieDetailsModal = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
+      {movie && <title>{`${movie.Title} | Movie Explorer`}</title>}
+
       {/* Modal Container */}
       <div
         className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl p-6 md:p-8 text-white"
