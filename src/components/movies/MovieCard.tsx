@@ -1,11 +1,19 @@
 import type { Movie } from "../../types/movies";
+import { FavoriteButton } from "../ui/FavoriteButton";
 
 interface MovieCardProps {
   movie: Movie;
+  isFavorite: boolean;
   onSelect: (imdbID: string) => void;
+  onToggleFavorite: (movie: Movie) => void;
 }
 
-export const MovieCard = ({ movie, onSelect }: MovieCardProps) => {
+export const MovieCard = ({
+  movie,
+  isFavorite,
+  onSelect,
+  onToggleFavorite,
+}: MovieCardProps) => {
   return (
     <div
       onClick={() => onSelect(movie.imdbID)}
@@ -24,6 +32,13 @@ export const MovieCard = ({ movie, onSelect }: MovieCardProps) => {
             No Poster Available
           </div>
         )}
+
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={() => onToggleFavorite(movie)}
+          label={movie.Title}
+          className="absolute top-2 right-2"
+        />
       </div>
 
       <div className="p-4 flex flex-col flex-1 justify-between">

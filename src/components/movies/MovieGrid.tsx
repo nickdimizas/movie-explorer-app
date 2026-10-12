@@ -6,6 +6,9 @@ interface MovieGridProps {
   isLoading: boolean;
   isError: boolean;
   onSelectMovie: (imdbID: string) => void;
+  isFavorite: (imdbID: string) => boolean;
+  onToggleFavorite: (movie: Movie) => void;
+  emptyMessage?: string;
 }
 
 export const MovieGrid = ({
@@ -13,6 +16,9 @@ export const MovieGrid = ({
   isLoading,
   isError,
   onSelectMovie,
+  isFavorite,
+  onToggleFavorite,
+  emptyMessage = "No movies found. Try another search!",
 }: MovieGridProps) => {
   if (isLoading) {
     return (
@@ -32,16 +38,20 @@ export const MovieGrid = ({
 
   if (movies.length === 0) {
     return (
-      <div className="text-center text-slate-400 py-12">
-        No movies found. Try another search!
-      </div>
+      <div className="text-center text-slate-400 py-12">{emptyMessage}</div>
     );
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       {movies.map((movie) => (
-        <MovieCard key={movie.imdbID} movie={movie} onSelect={onSelectMovie} />
+        <MovieCard
+          key={movie.imdbID}
+          movie={movie}
+          onSelect={onSelectMovie}
+          isFavorite={isFavorite(movie.imdbID)}
+          onToggleFavorite={onToggleFavorite}
+        />
       ))}
     </div>
   );

@@ -4,6 +4,7 @@ import { MovieGrid } from "./MovieGrid";
 import { MovieDetailsModal } from "./MovieDetailsModal";
 import { Pagination } from "../ui/Pagination";
 import { useMovies, useMovieDetails } from "../../hooks/useMovies";
+import { useFavorites } from "../../hooks/useFavorites";
 import type { MovieType, SortOption } from "../../types/movies";
 
 export const MovieSearchContainer = () => {
@@ -12,6 +13,8 @@ export const MovieSearchContainer = () => {
   const [sortOption, setSortOption] = useState<SortOption>("");
   const [page, setPage] = useState<number>(1);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
+
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const { data, isLoading, isError } = useMovies({
     searchTerm,
@@ -79,6 +82,8 @@ export const MovieSearchContainer = () => {
         isLoading={isLoading}
         isError={isError}
         onSelectMovie={handleSelectMovie}
+        isFavorite={isFavorite}
+        onToggleFavorite={toggleFavorite}
       />
 
       {/* Pagination Component */}
