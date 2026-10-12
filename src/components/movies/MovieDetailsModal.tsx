@@ -1,9 +1,12 @@
 import type { MovieDetails } from "../../types/movies";
+import { FavoriteButton } from "../ui/FavoriteButton";
 
 interface MovieDetailsModalProps {
   movie: MovieDetails | undefined;
   isLoading: boolean;
   isOpen: boolean;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
   onClose: () => void;
 }
 
@@ -11,6 +14,8 @@ export const MovieDetailsModal = ({
   movie,
   isLoading,
   isOpen,
+  isFavorite,
+  onToggleFavorite,
   onClose,
 }: MovieDetailsModalProps) => {
   if (!isOpen) return null;
@@ -47,6 +52,15 @@ export const MovieDetailsModal = ({
             />
           </svg>
         </button>
+
+        {movie && (
+          <FavoriteButton
+            isFavorite={isFavorite}
+            onToggle={onToggleFavorite}
+            label={movie.Title}
+            className="absolute top-4 right-16 z-10"
+          />
+        )}
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">

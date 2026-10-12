@@ -71,6 +71,12 @@ export const MovieSearchContainer = () => {
     setSelectedMovieId(null);
   };
 
+  const handleToggleFromModal = () => {
+    if (!movieDetails) return;
+    const { imdbID, Title, Year, Type, Poster } = movieDetails;
+    toggleFavorite({ imdbID, Title, Year, Type, Poster });
+  };
+
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl min-h-screen space-y-8">
       {/* SearchBar Component */}
@@ -101,6 +107,8 @@ export const MovieSearchContainer = () => {
         movie={movieDetails}
         isLoading={isDetailsLoading}
         isOpen={!!selectedMovieId}
+        isFavorite={selectedMovieId ? isFavorite(selectedMovieId) : false}
+        onToggleFavorite={handleToggleFromModal}
         onClose={handleCloseModal}
       />
     </main>
