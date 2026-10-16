@@ -8,9 +8,9 @@ A modern, responsive React 19 application for searching movies, series, and epis
 
 ## 📸 Screenshots
 
-|              Search & Filtering              |           Movie Details Modal            |
-| :------------------------------------------: | :--------------------------------------: |
-| ![Search Results](./docs/search-results.png) | ![Movie Details](./docs/movie-modal.png) |
+|            Search & Filtering            |               Favorites Tab                |               Movie Details Modal                |
+| :--------------------------------------: | :----------------------------------------: | :----------------------------------------------: |
+| ![Search Results](./docs/search-tab.png) | ![Favorites Tab](./docs/favorites-tab.png) | ![Movie Details](./docs/movie-details-modal.png) |
 
 ---
 
