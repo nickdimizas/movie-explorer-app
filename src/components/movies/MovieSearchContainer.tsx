@@ -7,14 +7,24 @@ import { useMovies, useMovieDetails } from "../../hooks/useMovies";
 import { useFavorites } from "../../hooks/useFavorites";
 import type { MovieType, SortOption } from "../../types/movies";
 
+type View = "search" | "favorites";
+
+const tabClass = (isActive: boolean) =>
+  `px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer border ${
+    isActive
+      ? "bg-indigo-600 border-indigo-500 text-white"
+      : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"
+  }`;
+
 export const MovieSearchContainer = () => {
+  const [view, setView] = useState<View>("search");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [type, setType] = useState<MovieType>("");
   const [sortOption, setSortOption] = useState<SortOption>("");
   const [page, setPage] = useState<number>(1);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
 
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   const { data, isLoading, isError } = useMovies({
     searchTerm,
@@ -79,30 +89,62 @@ export const MovieSearchContainer = () => {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl min-h-screen space-y-8">
-      {/* SearchBar Component */}
-      <SearchBar onSearch={handleSearch} />
+      {/* View tabs */}
+      <div className="flex gap-2">
+        <button
+          type="button"
+          aria-pressed={view === "search"}
+          onClick={() => setView("search")}
+          className={tabClass(view === "search")}
+        >
+          Search
+        </button>
+        <button
+          type="button"
+          aria-pressed={view === "favorites"}
+          onClick={() => setView("favorites")}
+          className={tabClass(view === "favorites")}
+        >
+          Favorites ({favorites.length})
+        </button>
+      </div>
+      {/* Search view: hidden (not unmounted) so SearchBar keeps its state */}
+      <div className={view === "search" ? "space-y-8" : "hidden"}>
+        <SearchBar onSearch={handleSearch} />
 
-      {/* MovieGrid Component */}
-      <MovieGrid
-        movies={sortedMovies}
-        isLoading={isLoading}
-        isError={isError}
-        onSelectMovie={handleSelectMovie}
-        isFavorite={isFavorite}
-        onToggleFavorite={toggleFavorite}
-      />
-
-      {/* Pagination Component */}
-      {!isLoading && !isError && totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+        <MovieGrid
+          movies={sortedMovies}
           isLoading={isLoading}
+          isError={isError}
+          onSelectMovie={handleSelectMovie}
+          isFavorite={isFavorite}
+          onToggleFavorite={toggleFavorite}
+        />
+
+        {!isLoading && !isError && totalPages > 1 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            isLoading={isLoading}
+          />
+        )}
+      </div>
+
+      {/* Favorites view */}
+      {view === "favorites" && (
+        <MovieGrid
+          movies={favorites}
+          isLoading={false}
+          isError={false}
+          onSelectMovie={handleSelectMovie}
+          isFavorite={isFavorite}
+          onToggleFavorite={toggleFavorite}
+          emptyMessage="No favorites yet. Click the heart on a movie to save it here."
         />
       )}
 
-      {/* MovieDetailsModal Component */}
+      {/* MovieDetailsModal: shared by both views */}
       <MovieDetailsModal
         movie={movieDetails}
         isLoading={isDetailsLoading}
