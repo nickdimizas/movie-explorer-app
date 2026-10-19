@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { MovieDetails } from "../../types/movies";
 import { FavoriteButton } from "../ui/FavoriteButton";
 
@@ -18,6 +19,16 @@ export const MovieDetailsModal = ({
   onToggleFavorite,
   onClose,
 }: MovieDetailsModalProps) => {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
   if (!isOpen) return null;
 
   return (
@@ -29,6 +40,9 @@ export const MovieDetailsModal = ({
 
       {/* Modal Container */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={movie ? movie.Title : "Movie details"}
         className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl p-6 md:p-8 text-white"
         onClick={(e) => e.stopPropagation()}
       >
