@@ -88,7 +88,7 @@ export const MovieSearchContainer = () => {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-7xl min-h-screen space-y-8">
+    <div className="container mx-auto px-4 py-8 max-w-7xl min-h-screen space-y-8">
       {/* View tabs */}
       <div className="flex gap-2">
         <button
@@ -153,6 +153,6 @@ export const MovieSearchContainer = () => {
         onToggleFavorite={handleToggleFromModal}
         onClose={handleCloseModal}
       />
-    </main>
+    </div>
   );
 };
