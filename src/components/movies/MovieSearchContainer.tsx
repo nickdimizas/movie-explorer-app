@@ -88,7 +88,7 @@ export const MovieSearchContainer = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl min-h-screen space-y-8">
+    <div className="space-y-8">
       {/* View tabs */}
       <div className="flex gap-2">
         <button
@@ -108,7 +108,7 @@ export const MovieSearchContainer = () => {
           Favorites ({favorites.length})
         </button>
       </div>
-      {/* Search view: hidden (not unmounted) so SearchBar keeps its state */}
+      {/* Search view */}
       <div className={view === "search" ? "space-y-8" : "hidden"}>
         <SearchBar onSearch={handleSearch} />
 
@@ -144,7 +144,7 @@ export const MovieSearchContainer = () => {
         />
       )}
 
-      {/* MovieDetailsModal: shared by both views */}
+      {/* MovieDetailsModal */}
       <MovieDetailsModal
         movie={movieDetails}
         isLoading={isDetailsLoading}
