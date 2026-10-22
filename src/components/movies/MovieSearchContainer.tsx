@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { SearchBar } from "../ui/SearchBar";
 import { MovieGrid } from "./MovieGrid";
 import { MovieDetailsModal } from "./MovieDetailsModal";
@@ -6,8 +6,11 @@ import { Pagination } from "../ui/Pagination";
 import { useMovies, useMovieDetails } from "../../hooks/useMovies";
 import { useFavorites } from "../../hooks/useFavorites";
 import type { MovieType, SortOption } from "../../types/movies";
-
-type View = "search" | "favorites";
+import {
+  buildUrlSearch,
+  readUrlState,
+  type View,
+} from "../../utils/searchParams";
 
 const tabClass = (isActive: boolean) =>
   `px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer border ${
@@ -17,12 +20,22 @@ const tabClass = (isActive: boolean) =>
   }`;
 
 export const MovieSearchContainer = () => {
-  const [view, setView] = useState<View>("search");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [type, setType] = useState<MovieType>("");
-  const [sortOption, setSortOption] = useState<SortOption>("");
-  const [page, setPage] = useState<number>(1);
+  const [initial] = useState(readUrlState);
+  const [view, setView] = useState<View>(initial.view);
+  const [searchTerm, setSearchTerm] = useState<string>(initial.searchTerm);
+  const [type, setType] = useState<MovieType>(initial.type);
+  const [sortOption, setSortOption] = useState<SortOption>(initial.sortOption);
+  const [page, setPage] = useState<number>(initial.page);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const query = buildUrlSearch({ searchTerm, type, sortOption, page, view });
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${query}`,
+    );
+  }, [searchTerm, type, sortOption, page, view]);
 
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
@@ -62,10 +75,12 @@ export const MovieSearchContainer = () => {
     selectedType: MovieType,
     selectedSort: SortOption,
   ) => {
+    if (term !== searchTerm || selectedType !== type) {
+      setPage(1);
+    }
     setSearchTerm(term);
     setType(selectedType);
     setSortOption(selectedSort);
-    setPage(1);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -110,7 +125,12 @@ export const MovieSearchContainer = () => {
       </div>
       {/* Search view */}
       <div className={view === "search" ? "space-y-8" : "hidden"}>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar
+          onSearch={handleSearch}
+          initialSearchTerm={initial.searchTerm}
+          initialType={initial.type}
+          initialSortOption={initial.sortOption}
+        />
 
         <MovieGrid
           movies={sortedMovies}
