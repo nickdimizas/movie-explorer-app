@@ -49,4 +49,5 @@ export interface SearchBarProps {
   ) => void;
   initialSearchTerm?: string;
   initialType?: MovieType;
+  initialSortOption?: SortOption;
 }

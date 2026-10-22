@@ -7,10 +7,11 @@ export const SearchBar = ({
   onSearch,
   initialSearchTerm = "",
   initialType = "",
+  initialSortOption = "",
 }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm);
   const [selectedType, setSelectedType] = useState<MovieType>(initialType);
-  const [sortOption, setSortOption] = useState<SortOption>("");
+  const [sortOption, setSortOption] = useState<SortOption>(initialSortOption);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
