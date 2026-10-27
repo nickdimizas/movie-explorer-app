@@ -63,4 +63,23 @@ describe("sortMoviesByYear", () => {
   it("handles an empty list", () => {
     expect(sortMoviesByYear([], "year-desc")).toEqual([]);
   });
+
+  it("puts items without a valid year last in both orders", () => {
+    const list = [
+      { imdbID: "unknown", Year: "N/A" },
+      { imdbID: "old", Year: "1985" },
+      { imdbID: "new", Year: "2020" },
+    ];
+
+    expect(ids(sortMoviesByYear(list, "year-asc"))).toEqual([
+      "old",
+      "new",
+      "unknown",
+    ]);
+    expect(ids(sortMoviesByYear(list, "year-desc"))).toEqual([
+      "new",
+      "old",
+      "unknown",
+    ]);
+  });
 });
