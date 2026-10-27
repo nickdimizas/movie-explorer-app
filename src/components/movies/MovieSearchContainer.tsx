@@ -11,6 +11,7 @@ import {
   readUrlState,
   type View,
 } from "../../utils/searchParams";
+import { sortMoviesByYear } from "../../utils/sortMovies";
 
 const tabClass = (isActive: boolean) =>
   `px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer border ${
@@ -52,23 +53,10 @@ export const MovieSearchContainer = () => {
   const totalResults = Number(data?.totalResults ?? 0);
   const totalPages = Math.ceil(totalResults / 10);
 
-  const sortedMovies = useMemo(() => {
-    if (!data?.Search) return [];
-
-    const moviesCopy = [...data.Search];
-
-    if (!sortOption) return moviesCopy;
-
-    return moviesCopy.sort((a, b) => {
-      const yearA = parseInt(a.Year, 10) || 0;
-      const yearB = parseInt(b.Year, 10) || 0;
-
-      if (sortOption === "year-desc") {
-        return yearB - yearA;
-      }
-      return yearA - yearB;
-    });
-  }, [data, sortOption]);
+  const sortedMovies = useMemo(
+    () => sortMoviesByYear(data?.Search ?? [], sortOption),
+    [data, sortOption],
+  );
 
   const handleSearch = (
     term: string,
